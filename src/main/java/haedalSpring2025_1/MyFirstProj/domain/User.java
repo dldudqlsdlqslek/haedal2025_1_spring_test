@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -16,7 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -36,12 +37,24 @@ public class User {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "follower")
+    private List<Follow> followings;
+
+    @OneToMany(mappedBy = "following")
+    private List<Follow> followers;
+
     public User(String username, String password, String name) {
         this.username = username;
         this.password = password;
         this.name = name;
-        this.joinedAt = LocalDateTime.now();
         this.bio = null;
+        this.joinedAt = LocalDateTime.now();
         this.imageUrl = null;
     }
 }
